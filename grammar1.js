@@ -293,9 +293,90 @@ typeof null; //"object"
 //값이 null인지 확인하려면 "=== null"을 사용하애 함
 
 /*
-null과 undefined는 둘 다 빈 값.
+null과 undefined는 둘 다 빈 값
 undefined: 기본값이라는 의미라도 있음
 null: 아무 역할도 없음
 */
 
+//-------------------------------------------------------------------------------------
+/*
+2.3 변수
+
+-변수(variable): 특정한 값을 저장하고 저장한 값을 불러올 수 있게 하는 것
+-선언(declaration): 변수를 만드는 행위
+
+-변수를 만드는 방법: let, const, var
+    let 변수명 = 식;
+
+-선언문: let으로 시작하는 명령
+-total: 변수명
+-초기화(initialization): 변수를 선언함과 동시에 값을 대입하는 행위
+-변수 선언은 항상 결괏값이 undefined로 출력됨
+-변수의 이름과 값은 컴퓨터의 메모리에 저장됨
+-변수는 메모리 안에 저장되어 있으므로 메모리를 초기화하면 (변수의 초기화와는 다름) 메모리에 저장되어 있던
+변수도 사라진다
+-이미 선언한 변수를 다시 선언하면 Error 발생 -> 변수명 겹치지 않도록
+
+-예약어(reserved word): 자바스크립트 프로그래밍에서 특정한 역할을 하므로 변수명으로 쓰지X
+await, break, case, catch, class, const, continue, debugger, default, delete, do, else,
+enum, export, extends, false, finally, for, function, if, import, in, instanceof, new,
+null, return, super, switch, this, throw, true, try, typeof, var, void, while, with, yield
+
+*/
+
+// let 변수명 = 식;
+let total = 5000 + 8000 + 10000 + 9000; //undefined / 더하기 연산자 결과를 total이라는 이름으로 저장
+total; //32000
+console.log(total); //32000
+
+let string = 'Hello, variable'; // undefined
+string;     //"Hello, variable"
+
+let empty;
+empty; // undefined / undefined는 기본값이므로 변수선언 시 값 대입 안하면 기본값이 undefined이다
+
+
+//변수명 짓기
+let banana = 'apple'; //바람직X
+let a = 'apple'; //바람직X
+
+//변수명 제약: 특수문자 $와 _만 사용 가능, 숫자로 시작X
+//let er^ror = 'No!'; //Error!
+//let 2error = 'No!'; //Error!
+let 한글 = 'Yes!';
+let 漢字 = 'Yes!'; //한글, 한자, 유니코드 변수명 사용 가능
+
+//예약어는 변수명 사용 불가
+//let let = 'No!'; //Error!
+//let var = 'No!'; //Error!
+
+
+//2.3.2. 변수의 값 수정하기--------------------------------------------------------
+let change = '바꿔 봐'; //undefined
+change = '바꿨다'; //chnage 변수의 값 바꿈
+change; //"바꿨다"
+
+/* 
+change = "바꿨다" 에서 결괏값이 있는 이유는?
+let이 없을 때는 코드가 '식'이라서 대입한 값이 결괏값으로 출력되지만,
+let이 앞에 붙는 순간 '선언문'이 됨.
+문(statement)는 식과 다르게 결괏값이 없고 식의 자리에 사용할 수 없음
+*/
+
+//변수에 넣은 값을 비우는 경우: undefined 대입 or null 대입
+change = undefined; //undefined
+change = null; //null : null을 대입해 갑승ㄹ 의도적으로 지웠다는 의미 부여
+
+
+//2.3.3 변수 활용하기--------------------------------------------------------
+
+//변수를 다른 변수에 대입
+let string = 'Hello, variable'; //undefined
+let string2 = string;   //undefined
+string2; //"Hello, variable" (string의 변수 값이 string2에 대입됨)
+
+// 자신을 자신에 대입
+let number = 5;
+number = number + 3; //8 (대입 연산자(=)는 산술 연산자보다 우선순위가 낮아서 연산 후 대입됨)
+number += 3; //8
 
