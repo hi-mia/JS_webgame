@@ -302,7 +302,7 @@ null: 아무 역할도 없음
 /*
 2.3 변수
 
--변수(variable): 특정한 값을 저장하고 저장한 값을 불러올 수 있게 하는 것
+-변수(variable): 특정한 값을 저장하고 저장한 값을 불러올 수 있게 하는 것 / 변하는 수
 -선언(declaration): 변수를 만드는 행위
 
 -변수를 만드는 방법: let, const, var
@@ -321,6 +321,12 @@ null: 아무 역할도 없음
 await, break, case, catch, class, const, continue, debugger, default, delete, do, else,
 enum, export, extends, false, finally, for, function, if, import, in, instanceof, new,
 null, return, super, switch, this, throw, true, try, typeof, var, void, while, with, yield
+
+-const: 상수(변하지 않는 수)
+const는 엄밀히 말해 상수는 아님, 객체의 내부 값에는 적용X
+실수로 값을 수정하는 일을 막기 위해 상수 사용
+
+-var: 변수
 
 */
 
@@ -380,3 +386,52 @@ let number = 5;
 number = number + 3; //8 (대입 연산자(=)는 산술 연산자보다 우선순위가 낮아서 연산 후 대입됨)
 number += 3; //8
 
+//변수는 중복을 줄일 때도 사용
+console.log('엄청 긴 문자열입니다.');
+console.log('엄청 긴 문자열입니다.');
+console.log('엄청 긴 문자열입니다.');
+
+console.log('엄청 긴 문자열을 수정합니다.');
+console.log('엄청 긴 문자열을 수정합니다.');
+console.log('엄청 긴 문자열을 수정합니다.');
+
+let string1 = '엄청 긴 문자열입니다.';
+console.log(string1);
+console.log(string1);
+console.log(string1);
+
+let string1 = '엄청 긴 문자열을 수정합니다.'; //변수만 수정하면 된다
+console.log(string1);
+console.log(string1);
+console.log(string1);
+
+
+//2.3.4 상수 만들기--------------------------------------------------------
+let string1 = '엄청 긴 문자열입니다.';
+
+//string1 변수가 나중에 실수로 수정되는 것을 막기 위해 const로 바꿈
+const string1 = '엄청 긴 문자열입니다.';
+
+const value = '상수입니다.'; //undefined
+value = '바꿀 수 없습니다'; //Error! / 상수에 다른 값 대입하면 에러
+
+//const로 선언한 상수 다시 선언X / 상수 선언 시 초기화하지 않으면 에러 발생
+const value = '다시 선언할 수 없습니다.'; //Error!
+const wrong;    //Error!
+
+
+//2.3.5 var 알아보기--------------------------------------------------------
+//var로 변수 선언하는 것 = 변수문(variable statement)
+var variable = '다시 선언할 수 있습니다'; //undefined
+variable; // "다시 선언할 수 있습니다"
+
+var variable2; //undefined
+variable2; //undefined
+
+//기존에 선언했던 variable 변수를 다시 선언해도 에러 발생X
+var variable = '다시 선언할 수 있습니다.'; //undefined
+
+//예약어와 같은 이름을 변수명으로 사용 가능 (let을 사용하면 에러 발생)
+var undefined = 'defined'; //undefined
+var Infinity = 0; //undefined
+var let = 'const'; //undefined
