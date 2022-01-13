@@ -1,0 +1,112 @@
+<h2>단원 마무리</h2>
+
+<p>1. 대화상자 띄우기</p>
+prompt: 대화 상자에 사용자가 입력한 메시지가 문자열 형태로 전달되고, 입력하지 않고 취소를 누르면
+        null이 전달됨
+
+alert: 단순한 알림창으로, 호출하면 확인을 누르기 전가지 다음 스크립트 실행이 중단됨
+        디버깅 용도로 사용할 때는 console.log를 사용함
+
+confirm: 사용자에게 확인을 받을 때 사용함. 사용자가 확인을 누르면 true가 전달되고,
+         취소를 누르면 false가 전달됨
+
+<script>
+    prompt('사용자에게 표시할 메시지');
+    alert('사용자에게 표시할 메시지');
+    confirm('사용자에게 표시할 메시지');
+</script>
+
+
+<p>2. HTML 태그 선택하기</p>
+
+선택: HTML 태그를 가져오는 것
+선택자: HTML 태그를 선택할 수 있게 도와주는 문자열
+
+여기서는 태그를 저장하는 변수명은 $로 시작한다는 규칙 있음
+
+document.querySelector로는 하나의 태그만 선택할 수 있고,
+document.querySelectorAll로는 여러 개의 태그를 선택할 수 있음
+
+<script>
+    document.querySelector('선택자');
+    document.querySelectorAll('선택자');
+</script>
+
+단순한 태그일 때 선택자: 태그의 이름    ex) 버튼 태그는 button이 선택자
+하나의 태그만 콕 찝어서 선택하고 싶을 때: id 속성 사용 (#아이디)
+여러 개의 동시에 선택하고 싶을 때: class 속성 사용(.클래스)
+
+<script>
+    document.querySelector('#아이디')
+    document.querySelectorAll('.클래스')
+</script>
+
+어떤 태그 안에 들어 있는 다른 태그를 선택하고 싶다면 선택자 사이를 한 칸 띄면 됨
+그러면 앞 선택자 안에 들어 있는 태그가 선택됨
+
+<script>
+    document.querySelector('선택자 내부선택자 내부선택자...')
+</script>
+
+
+<p>3. 태그에 이벤트 달기</p>
+태그를 선택한 후에 addEventListener 메서드를 사용해 이벤트를 연결함
+첫 번째 인수로 이벤트 이름을 넣고, 두 번째 인수로 리스너 함수를 넣음
+리스너 함수: 이벤트가 발생할 때 실행되는 함수
+
+<script>
+    태그.addEventListener('이벤트 이름', 리스너함수);
+</script>
+
+리스너 함수의 매개변수로 event 객체를 제공해서 이벤트와 관련된 정보를 얻을 수 있음
+ex) input 태그에 입력된 값을 가져오려면 event.target.value를 넣음 
+    (event.target: 이벤트가 발생한 대상 태그)
+
+<script>
+    const 리스너함수 = (event) => {
+        console.log(event.target.value);
+    };
+</script>
+
+입력창에 입력된 값은 value 속성으로 가져옴. value에 값을 대입하면 대입한 값으로 변경됨
+
+<script>
+    입력창.value  //입력창의 값을 가져옴
+    입력창.value = 값  //입력창에 값을 넣음
+</script>
+
+입력 태그(input, select, textarea 등)가 아닌 일반 태그들의 내부 값을 가져올 때는
+textContent 속성을 사용(value X)
+
+<script>
+    태그.textContent   //태그 내부의 문자를 가져옴
+    태그.textContent = 값  //태그 내부의 문자를 해당 값으로 설정함
+</script>
+
+입력창이나 버튼의 경우 focus 메서드를 호출하면 해당 태그가 하이라이트됨
+<script>
+    입력창.focus()  //입력창을 하이라이트
+</script>
+
+
+<p>4. 진리표</p>
+여러 개의 if문을 하나로 합치려면 진리표를 활용함(OR / AND 관계)
+
+1) OR 관계
+
+첫번째 조건         두번째 조건         최종결과
+---------------------------------------------------------------
+true                 true               true
+true                 false              true
+false                true               true
+false                false              false
+
+
+2) AND 관계
+
+첫번째 조건         두번째 조건         최종결과
+---------------------------------------------------------------
+true                 true               true
+true                 false              false
+false                true               false
+false                false              false
