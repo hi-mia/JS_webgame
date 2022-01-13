@@ -54,8 +54,14 @@ document.querySelectorAll로는 여러 개의 태그를 선택할 수 있음
 첫 번째 인수로 이벤트 이름을 넣고, 두 번째 인수로 리스너 함수를 넣음
 리스너 함수: 이벤트가 발생할 때 실행되는 함수
 
+콜백 함수(callback Function): 특정 작업이 실행되고 난 뒤에 추가로 실행되는 함수
+ex) onClickButton: 버튼을 클릭한 후에 onClickButton이 추가적으로 실행되므로 콜백함수
+
 <script>
     태그.addEventListener('이벤트 이름', 리스너함수);
+
+    $button.addEventListener('click', onClickButton);
+    //클릭 이벤트의 이름: click / 콜백함수: onClickButton
 </script>
 
 리스너 함수의 매개변수로 event 객체를 제공해서 이벤트와 관련된 정보를 얻을 수 있음
