@@ -1,0 +1,61 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>가위바위보</title>
+    <style>
+        #computer {
+            width: 142px;
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+<div id="computer"></div>
+<div>
+    <button id="scissors" class="btn">가위</button>
+    <button id="rock" class="btn">바위</button>
+    <button id="paper" class="btn">보</button>
+</div>
+<div id="score">0</div>
+<script>
+    const $computer = document.querySelector('#computer');
+    const $score = document.querySelector('#score');
+    const $rock = document.querySelector('#rock');
+    const $scissors = document.querySelector('#scissors');
+    const $paper = document.querySelector('#paper');
+    const IMG_URL = './rsp.png';
+    $computer.style.background = `url(${IMG_URL}) 0 0`;
+    $computer.style.backgroundSize = 'auto 200px';
+
+    //이미지 스프라이트
+    const IMG_URL = './rsp.png';
+    $computer.style.background = `url(${IMG_URL}) 0 0 `; //가위
+    $computer.style.background = `url(${IMG_URL}) -220px 0 `; //바위
+    $computer.style.background = `url(${IMG_URL}) -440px 0 `; //보
+    $computer.style.backgroundSize = 'auto 200px'; //backgroundSize CSS 속성은 background 속성과 함상 같이 나와야 함
+
+    //x좌표: 객체로 묶어서 표현
+    const rspX = {
+        scissorsX = '0', //가위
+        rockX = '-220px', //바위
+        paperX = '-440px', //보
+    };
+
+    let computerChoice = 'scissors';
+    const changeComputerHand = () => {
+        if(computerChoice === 'rock') {
+            computerChoice = 'scissors';
+        } else if (computerChoice === 'scissors') {
+            computerChoice = 'paper';
+        } else if (computerChoice === 'paper') {
+            computerChoice = 'rock';
+        }
+        $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0 `;
+        $computer.style.backgroundSize = 'auto 200px';
+    }
+
+</script>
+</body>
+
+</html>
