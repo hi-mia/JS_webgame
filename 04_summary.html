@@ -1,1 +1,159 @@
 <h2>단원 마무리</h2>
+
+<p>1. 피셔-예이츠 셔플 알고리즘</p>
+숫자를 무작위로 섞는 방법
+먼저 무작위 인덱스를 하나 뽑은 후, 그에 해당되는 요소를 새로운 배열로 옮김
+이를 반복하다 보면 새 배열에 무작위로 섞인 숫자들이 들어감
+
+<p>2. sort</p>
+비교 함수에 적힌 내용대로 배열을 정렬하는 메서드
+배열의 크기가 커질수록 정렬의 효율이 선택 정렬보다 훨씬 좋아짐
+
+비교 함수: sort 메서드 안에 들어있는 함수, 이 함수에 적힌 규칙에 따라 배열이 정렬됨
+
+<script>
+
+    배열.sort(비교함수);
+
+    //비교함수 형태
+    (a, b) => 반환값   //반환값: a - b
+
+</script>
+
+비교 함수의 반환값에 따라 배열이 다르게 정렬됨
+반환값이 0보다 크면 b,a 순으로 정렬, 0보다 작으면 a,b 순으로 정렬
+
+*선택 정렬(selection sort): 숫자가 작은 순서대로 하나씩 가져와서 정렬하는 것
+
+
+<p>3. setTimeout</p>
+지정한 시간(밀리초) 뒤에 지정한 작업을 수행하는 타이머
+
+<script>
+
+    setTimeout(() => {
+        //내용
+    }, 밀리초);
+
+</script>
+
+setTimeout 안에 넣는 함수: 특정 작업(지정한 시간까지 기다리기) 이후에 추가로 실행되는 함수(콜백 함수)
+밀리초 단위이므로 (원하는 초 * 1000)
+
+
+<p>4. 스코프</p>
+var: 함수 스코프 (함수를 경계로 접근 여부가 달라지는 것)
+let, const: 블록 스코프 (블록을 경계로 접근 여부가 달라지는 것) / 블록: {}
+
+<script>
+
+    for(let i = 0; i < winBalls.length; i++) {
+        setTimeout(() => {
+            drawBall(winBalls[i], $result);
+        }, 1000 * (i + 1));
+    }
+
+    //let을 var로 만듦
+    for(var i = 0; i < winBalls.length; i++) {
+        setTimeout(() => {
+            console.log(winBalls[i], i);
+            drawBall(winBalls[i], $result);
+        }, 1000 * (i + 1));
+    }
+    //보너스 공 빼고 모든 공에서 숫자가 뜨지 않음 / winballs[i]와 i를 콘솔출력: undefined 6
+
+</script>
+
+<script>
+    function b() {
+        var a = 1;
+    }
+    console.log(a); //에러 발생
+
+</script>
+a는 함수 안에 선언된 변수이므로 함수 바깥에서는 접근할 수 없음
+
+<script>
+
+    if(true) {
+        var a = 1;
+    }
+    console.log(a); //1
+
+    //let: 블록 스코프 -> 블록 바깥에서는 블록 안에 있는 let에 접근할 수 없다
+    if(true) {
+        let a = 1;
+    }
+    console.log(a); //에러
+
+</script>
+
+<script>
+
+    //var는 블록과 관계없어 문제없이 돌아감
+    for(var i = 0; i < 5; i++) {
+        console.log(i); //5
+    }
+
+    //let은 에러 발생 (for문 블록 바깥에서 접근했기 때문)
+    for(let i = 0; i < 5; i++) {}
+    console.log(i); //에러
+
+</script>
+
+함수, if문, for문에서 접근 범위의 차이를 보임
+let을 사용할 때는 for문 안에서 let 변수의 값이 고정되므로 var와는 실행 결과가 달라짐
+
+비동기 함수와 반복문, var를 만나면 스코프 관련 문제 생김
+
+
+
+<script>
+
+    for(let i = 0; i < winBalls.length; i++) {
+        setTimeout(() => {
+            drawBall(winBalls[i], $result);
+        }, 1000 * (i + 1));
+    }
+
+/*
+for문에서 쓰이는 let은 하나의 블록마다 i가 고정됨 (블록스코프의 특성)
+따라서 setTimeout 콜백 함수 내부의 i도 setTimeout을 호출할 때의 i와 같은 값이 들어감
+*/
+
+
+    //let을 var로 만듦-------------------------------------------
+    for(var i = 0; i < winBalls.length; i++) {
+        setTimeout(() => {
+            console.log(winBalls[i], i);
+            drawBall(winBalls[i], $result);
+        }, 1000 * (i + 1));
+    }
+
+/*
+실행 순서
+
+i가 0일 때 setTimeout(콜백0, 1000)  실행
+i가 1일 때 setTimeout(콜백1, 2000)  실행
+i가 2일 때 setTimeout(콜백2, 3000)  실행
+i가 3일 때 setTimeout(콜백3, 4000)  실행
+i가 4일 때 setTimeout(콜백4, 5000)  실행
+i가 5일 때 setTimeout(콜백5, 6000)  실행
+i가 6이 됨
+1초 후 콜백0 실행(i는 6)
+2초 후 콜백1 실행(i는 6)
+3초 후 콜백2 실행(i는 6)
+4초 후 콜백3 실행(i는 6)
+5초 후 콜백4 실행(i는 6)
+6초 후 콜백5 실행(i는 6)
+
+
+setTimeout 콜백 함수 안에 든 i와 바깥의 1000*(i+1)는 다른 시점에 실행됨
+1000*(i+1)는 반복문을 돌 때 실행되고, setTimeout의 콜백 함수는 지정한 시간 뒤에 호출됨
+그런데 반복문은 매우 빠른 속도로 돌아서 콜백 함수가 실행될 때는 이미 i가 6(winBalls.length가 6)이 되어 있음
+따라서 콜백 함수가 실행될 때 i를 콘솔로 출력하면 6이 나옴
+그리고 winBalls는 인덱스가 5까지밖에 없으므로 winBalls[6]은 undfined가 됨
+
+*/
+
+</script>
