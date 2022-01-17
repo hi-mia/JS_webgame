@@ -1,0 +1,111 @@
+<h2>단원 마무리</h2>
+
+<p>1. window</p>
+window 객체는 브라우저를 가리키는 객체로, 브라우저가 제공하는 기본 객체와 함수들은 대부분 
+window 객체 안에 들어 있음
+document 객체나 console 객체도 실제로는 window.document, window.console인데,
+window를 생략하고 document와 console만 적음
+
+
+<p>2. this</p>
+this는 상황에 따라 다른 값을 가짐
+기본적으로 this는 window 객체를 가리키므로 어떤 때에 어떤 값을 가지는지 외우면 됨
+  1) 객체를 통해 this를 사용할 때는 this가 해당 객체를 가리키게 됨
+  2) 특정 메서드는 콜백 함수의 this를 바꿈. addEventListener가 대표적
+  3) this가 바뀌는 것을 원치 않는다면 함수 선언문 대신 화살표 함수를 사용
+
+
+<p>3. 참조, 깊은 복사, 얕은 복사</p>
+복사: 어떤 값을 다른 변수에 대입할 때 기존 값과 참조 관계가 끊기는 것을 의미
+객체가 아닌 값은 애초부터 참조관계가 없으므로 그냥 복사됨
+
+객체 복사: 1) 얕은 복사 / 2) 깊은 복사
+얕은 복사: 중첩된 객체가 있을 때 가장 바깥 객체만 복사되고 내부 객체는 참조 관계를 유지하는 복사
+           깊은 복사와 참조의 중간에 위치한 복사 방법
+깊은 복사: 내부 객체까지 참조 관계가 끊겨서 복사되는 것 의미
+
+<script>
+    const array = [{ j: 'k'}, {l: 'm'}];
+    const reference = array; //참조
+    const shallowCopy = [...array]; //얕은 복사
+    const deepCopy = JSON.parse(JSON.stringify(array)); //깊은 복사
+    console.log(array === reference); //true
+    console.log(array[0] === reference[0]); //true
+    console.log(array === shallowCopy); //false
+    console.log(array[0] === shallowCopy[0]); //true
+    console.log(array === deepCopy); //false
+    console.log(array[0] === deepCopy[0]); //false
+
+    //깊은 복사 간단하게 하기
+    JSON.parse(JSON.stringify(값))
+
+</script>
+
+얕은 복사: ...연산자 사용(스프레드(spread) 문법)
+ex) 배열: [...배열] / 객체: {...객체}
+
+스프레드(spread) 문법: 기존 객체의 속성을 새 객체에 할당할 때 사용함
+
+
+깊은 복사 vs 참조
+<script>
+    const monster1 = JSON.parse(JSON.stringify(monsterList[0])); //깊은 복사
+    const monster2 = monsterList[0]; //monsterList[0]을 바로 대입
+    monster1.name = '새 몬스터';
+    console.log(monsterList[0].name); //슬라임
+    monster2.name = '새 몬스터';
+    console.log(monsterList[0].name); //새 몬스터
+    console.log(monsterList[0] === monster1); //false, 깊은 복사
+    console.log(monsterList[0] === monster2); //true, 참조 관계
+</script>
+monster1 변수에는 monsterList[0](슬라임)을 깊은 복사 / monster2 변수에는 monsterList[0]을 바로 대입
+monster1.name을 변경하면 monsterList[0]에는 아무 영향X
+monster2.name을 변경하면 monsterList[0]도 같이 변경됨
+
+monster1은 monster[0]을 깊은 복사했으므로 서로 다른 객체가 되지만,
+monster2는 monsterList[0]을 그대로 대입해 참조관계가 형성되어 monster2와 monsterList[0]은 같은 객체가 됨
+따라서 monster2를 바꾸면 monsterList[0]에도 영향이 감
+-> 참조하는 경우 / 깊은 복사를 하는 경우를 구별해서 사용해야 함
+
+
+간단한 객체는 JSON.parse(JSON.stringify(객체))를 사용해도 큰 문제X
+BUT 성능이 느리고 함수나 Math, Date 같은 객체 복사X
+-> lodash 같은 라이브러리 사용
+
+
+
+<p>4. 클래스</p>
+객체를 생성하는 템플릿 문법
+class 예약어로 클래스를 선언하고 constructor 메서드 안에 기존 코드를 넣음
+new를 붙여 호출하면 constructor 함수가 실행되고 객체가 반환됨
+this는 생성된 객체 자신을 기리키게 됨
+
+
+<p>5. 클래스 상속</p>
+클래스끼리 extends 예약어로 상속 가능
+상속하는 클래스는 부모 클래스 / 상속 받는 클래스는 자식 클래스
+공통되는 속성이나 메서드는 부모 클래스로부터 상속받음
+
+<script>
+
+class Hero extends Unit {
+    constructor(game, name) {
+        super(game, name, 100, 10, 0); //부모 클래스의 생성자 호출
+        this.lev = 1; //그 외 속성
+    }
+
+    attack(target) {
+        super.attack(target); //부모 클래스의 attack
+        //자식 클래스만의 동작
+    }
+}
+
+</script>
+
+자식 클래스에서 super함수는 부모 클래스를 의미하며 부모 클래스의 생성자에 인수를 전달함
+공통되는 속성은 부모 클래스의 것을 사용하고, 공통되지 않는 속성은 자식 클래스에 따로 선언함
+
+메서드에서도 super를 사용할 수 있음
+자식 클래스에서 super.메서드 를 호출하는 것은 부모 클래스의 메서드를 호출하는 것과 같음
+부모 클래스의 메서드를 호출한 후 다른 작업을 할 수 있음
+자식 클래스에 메서드를 생성하지 않은 경우에도 부모 클래스에 메서드가 존재한다면 호출 가능
