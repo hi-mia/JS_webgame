@@ -25,35 +25,91 @@
     const $scissors = document.querySelector('#scissors');
     const $paper = document.querySelector('#paper');
     const IMG_URL = './rsp.png';
-    $computer.style.background = `url(${IMG_URL}) 0 0`;
+    $computer.style.background = `url(${IMG_URL}) -464px 0`;
     $computer.style.backgroundSize = 'auto 200px';
-
-    //이미지 스프라이트
-    const IMG_URL = './rsp.png';
-    $computer.style.background = `url(${IMG_URL}) 0 0 `; //가위
-    $computer.style.background = `url(${IMG_URL}) -220px 0 `; //바위
-    $computer.style.background = `url(${IMG_URL}) -440px 0 `; //보
-    $computer.style.backgroundSize = 'auto 200px'; //backgroundSize CSS 속성은 background 속성과 함상 같이 나와야 함
 
     //x좌표: 객체로 묶어서 표현
     const rspX = {
-        scissorsX = '0', //가위
-        rockX = '-220px', //바위
-        paperX = '-440px', //보
+    scissors: '0', // 가위
+    rock: '-220px', // 바위
+    paper: '-440px', // 보
     };
 
-    let computerChoice = 'scissors';
-    const changeComputerHand = () => {
-        if(computerChoice === 'rock') {
-            computerChoice = 'scissors';
-        } else if (computerChoice === 'scissors') {
-            computerChoice = 'paper';
-        } else if (computerChoice === 'paper') {
-            computerChoice = 'rock';
-        }
-        $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0 `;
+
+    let computerChoice = 'scissors'; //처음에 컴퓨터가 가위를 내도록 함
+    const changeComputerHand = () => { //컴퓨터의 손 이미지를 바꾸는 함수
+        if (computerChoice === 'rock') { // 바위면
+        computerChoice = 'scissors';
+        } else if (computerChoice === 'scissors') { // 가위면
+        computerChoice = 'paper';
+        } else if (computerChoice === 'paper') { // 보면
+        computerChoice = 'rock';
+        } //데이터 수정
+        $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`; //화면 수정
         $computer.style.backgroundSize = 'auto 200px';
-    }
+
+    } //데이터와 화면을 분리해서 프로그래밍
+
+    let intervalId = setInterval(changeComputerHand, 50); //특정 주기로 반복 수행
+
+    //승부 결정 -> if문 사용 가능하지만 코드가 길다
+    // 가위: 1, 바위: 0, 보: -1일 때 두 값의 차이 -> 무승부: 0, 이기면 2 or -1, 지면 1 or -2
+/*
+  가위:  1,  바위:  0,  보:  -1
+
+  나\컴퓨터  가위   바위    보
+  가위        0     1      2
+  바위       -1     0      1
+  보         -2    -1      0
+*/
+    const scoreTable = {
+        rock: 0,
+        scissors: 1,
+        paper: -1,
+    };
+
+    // clickButton 5번 호출, 인터벌 1번, 2번, 3번, 4번, 5번(얘만 intervalId)
+    //  그 다음에 버튼을 클릭하면 5번만 취소
+    let clickable = true;
+    let score = 0;
+    const clickButton = () => {
+    if (clickable) { //clickable -> 버튼을 클릭한 동안에는 false로 만듦(함수 동작X)
+        clearInterval(intervalId);
+        clickable = false;
+        // 점수 계산 및 화면 표시
+        const myChoice = event.target.textContent === '바위'  //버튼을 클릭할 때 어떤 선택지 클릭? event.target.textContent
+          ? 'rock' 
+          : event.target.textContent === '가위' 
+            ? 'scissors' 
+            : 'paper';
+        const myScore = scoreTable[myChoice];
+        const computerScore = scoreTable[computerChoice];
+        const diff = myScore - computerScore;
+
+        let message;
+        if([2, -1].includes(diff)) { //이겼을 때 / if(diff === 2 || diff === -1) 도 가능
+            score += 1;
+            message = '승리';
+        } else if ([-2, 1].includes(diff)) { //졌을 때 / if (diff === -2 || diff === 1)
+            score -= 1;
+            message = '패배';
+        } else {
+            message = '무승부';
+        }
+        $score.textContent = `${message} 총: ${score}점`;
+
+        //점수 계산 및 화면 표시
+        setTimeout(() => {
+            clickable = true;
+            intervalId = setInterval(changeComputerHand, 50);
+        }, 1000);
+        }
+    }; 
+
+    $rock.addEventListener('click', clickButton);
+    $scissors.addEventListener('click', clickButton);
+    $paper.addEventListener('click', clickButton);
+        
 
 </script>
 </body>
