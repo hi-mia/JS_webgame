@@ -6,6 +6,15 @@ window 객체 안에 들어 있음
 document 객체나 console 객체도 실제로는 window.document, window.console인데,
 window를 생략하고 document와 console만 적음
 
+<script>
+    //this는 window 객체 가리킴
+    function a() {
+        console.log(this);
+    };
+    a(); //window 객체
+
+</script>
+
 
 <p>2. this</p>
 this는 상황에 따라 다른 값을 가짐
@@ -13,6 +22,84 @@ this는 상황에 따라 다른 값을 가짐
   1) 객체를 통해 this를 사용할 때는 this가 해당 객체를 가리키게 됨
   2) 특정 메서드는 콜백 함수의 this를 바꿈. addEventListener가 대표적
   3) this가 바뀌는 것을 원치 않는다면 함수 선언문 대신 화살표 함수를 사용
+
+<script>
+    const b = {
+        name: '제로초',
+        sayName() {
+            console.log(this === b);
+        }
+    };
+    b.sayName(); //true
+
+</script>
+
+<script>
+    const hero = {
+        attack: function(monster) { //여기서 this: hero
+        monster.hp -= this.att;
+        this.hp -= monster.att;
+        },
+
+        heal: function(monster) {
+            this.hp += 20;
+            this.hp -= monster.att;
+        }
+
+        //객체 메서드에서는 function 예약어를 생략할 수 있다
+        // attack(monster) {
+        //     monster.hp -= this.att;
+        //     this.hp -= monster.att;
+        // }
+
+        // heal(monster) {
+        //     this.hp += 20;
+        //     this.hp -= monster.att;
+        // }
+    };
+
+</script>
+
+함수 선언문일 때만 document가 나오는 이유는 click 이벤트가 발생하면 addEventListener 메서드가
+콜백 함수의 this를 event.target으로 바꿔서 호출하기 때문
+<script>
+    document.addEventListener('click', function(){
+        console.log(this); //document
+    });
+
+    //화살표 함수
+    document.addEventListener('click', () => {
+        console.log(this); //window
+    });
+
+</script>
+
+함수 선언문의 this는 bind 메서드를 사용하여 직접 바꿀 수 있음
+<script>
+    function a() {
+        console.log(this);
+    }
+    a.bind(document)(); //document
+
+</script>
+
+화살표 함수는 bind할 수 없음. 따라서 this가 바뀌지 않아 window가 그대로 나옴
+<script>
+    const b = () => {
+        console.log(this);
+    }
+    b.bind(document)(); //window
+
+</script>
+이런 이유로 addEventListener 안에서 함수 선언문을 사용하면 document가 출력되고,
+화살표 함수를 사용하면 window가 출력됨
+
+화살표 함수의 this가 무조건 window (X)
+화살표 함수는 기존 this를 유지할 뿐 this를 어떤 값으로 바꾸지는 않음
+
+모든 콜백 함수의 this가 다른 값으로 바뀌는 것도 아님
+-> this를 바꾸는 함수나 메서드를 볼 때마다 따로 외우고 있어야 함
+
 
 
 <p>3. 참조, 깊은 복사, 얕은 복사</p>
@@ -75,19 +162,152 @@ BUT 성능이 느리고 함수나 Math, Date 같은 객체 복사X
 
 
 <p>4. 클래스</p>
-객체를 생성하는 템플릿 문법
+클래스(class): 객체를 생성하는 템플릿(서식) 문법
 class 예약어로 클래스를 선언하고 constructor 메서드 안에 기존 코드를 넣음
 new를 붙여 호출하면 constructor 함수가 실행되고 객체가 반환됨
 this는 생성된 객체 자신을 기리키게 됨
 
+클래스 추가 이전에는 함수로 객체를 만듦
+<script>
+    //공장(factory) 함수: 객체를 반환하는 함수
+    function createMonster(name, hp, att, xp) {
+        return { name, hp, att, xp };
+    }
+    const monster1 = createMonster('슬라임', 25, 10, 11);
+    const monster2 = createMonster('슬라임', 26, 10, 10);
+    const monster3 = createMonster('슬라임', 25, 11, 10);
+
+    //이때 생성한 세 개의 객체가 다른 객체여야 함(참조 관계X)
+    //같은 객체를 반환하면 하나의 몬스터를 잡았는데도 다른 두마리가 같이 죽으므로
+    //매번 새로운 객체를 반환하게 객체 리터럴로 작성함 (또는 기존 객체를 깊은 복사)
+    
+</script>
+
+<script>
+    //객체 생성
+    function Monster(name, hp, att, xp) {
+        this.name = name;
+        this.hp = hp;
+        this.att = att;
+        this.xp = xp;
+    }
+    const monster1 = new Monster('슬라임', 25, 10, 11);
+    const monster2 = new Monster('슬라임', 26, 10, 10);
+    const monster3 = new Monster('슬라임', 25, 11, 10);
+
+</script>
+
+객체 속성을 this에 대입함
+그리고 함수를 호출할 때는 함수 이름 앞에 new를 붙임
+new를 붙여 호출해도 this는 객체 자신을 가리킴
+Monster에 new를 붙여 호출하는 함수: 생성자(constructor) 함수
+new를 붙이지 않고 호출하면 this는 window가 되어 window.name의 값을 바꾸게 됨 -> 반드시 new를 붙여 호출
+생성자 함수의 이름은 보통 대문자로 시작
+
+자바스크립트는 생성자 함수를 조금 더 편하게 쓸 수 있도록 클래스 문법 도입
+<script>
+    class Monster{
+        constructor(name, hp, att, xp) {
+            this.name = name;
+            this.hp = hp;
+            this.att = att;
+            this.xp = xp;
+        }
+    }
+
+    const monster1 = new Monster('슬라임', 25, 10, 11);
+    const monster2 = new Monster('슬라임', 26, 10, 10);
+    const monster3 = new Monster('슬라임', 25, 11, 10);
+
+</script>
+class 예약어로 클래스를 선언 / constructor 메서드 안에 기존 코드를 넣으면 됨
+클래스에 new를 붙여 호출하면 constructor 함수가 실행되고 객체가 반환됨 (여기서 this: 생성된 객체 자신)
+
+클래스 문법의 장점: 객체의 메서드를 같이 묶을 수 있음
+<script>
+    //클래스 문법 - 한번 만든 attack과 heal 메서드 계속 재사용 / 생성자함수와 메서드가 묶여 있음
+    class Monster{
+        constructor(name, hp, att, xp) {
+            this.name = name;
+            this.hp = hp;
+            this.att = att;
+            this.xp = xp;
+        }
+
+        attack(monster) {
+            monster.hp -= this.att;
+            this.hp -= monster.att;
+        }
+
+        heal(monster) {
+            this.hp += 20;
+            this.hp -= monster.att;
+        }
+    }
+
+
+    //공장 함수 - 객체 생성할 때마다 attack과 heal 메서드도 같이 새로 생성됨
+    function createMonster(name, hp, att, xp) {
+        return {
+            name, hp, att, xp,
+            attack(monster) {
+                monster.hp -= this.att;
+                this.hp -= monster.att;
+            },
+
+            heal(monster) {
+                this.hp += 20;
+                this.hp -= monster.att;
+            },
+        };
+    }
+
+
+    //생성자 함수 - attack과 heal 메서드 재사용 but 생성자 함수와 프로토타입 메서드가 하나로 묶여있지 않음
+    function Monster(name, hp, att, xp) {
+        this.name = name;
+        this.hp = hp;
+        this.att = att;
+        this.xp = xp;
+    }
+
+    //생성자 함수에 메서드 추가: prototype이라는 속성 안에 추가
+    Monster.prototype.attack = function(monster) {
+        monster.hp -= this.att;
+        this.hp -= monster.att;
+    };
+
+    Monster.prototype.heal = function(monster) {
+        this.hp += 20;
+        this.hp -= monster.att;
+    };
+
+</script>
+
+프로토타입 메서드: prototype 속성 안에 추가한 메서드
+생성자 함수에 메서드를 추가할 때는 prototype이라는 속성 안에 추가해야 함
+
+객체지향 프로그래밍: 클래스 위주로 프로그래밍
+함수형 프로그래밍: 함수를 조합해 가며 프로그래밍
+절차형 프로그래밍: 절차대로 프로그래밍
+
 
 <p>5. 클래스 상속</p>
+
+<script>
+    class A extends B {
+        method() {
+            super.method(); //메서드 내에서 부모의 메서드만 호출하므로 생략 가능
+        }
+    }
+</script>
+
 클래스끼리 extends 예약어로 상속 가능
 상속하는 클래스는 부모 클래스 / 상속 받는 클래스는 자식 클래스
 공통되는 속성이나 메서드는 부모 클래스로부터 상속받음
 
-<script>
 
+<script>
 class Hero extends Unit {
     constructor(game, name) {
         super(game, name, 100, 10, 0); //부모 클래스의 생성자 호출
