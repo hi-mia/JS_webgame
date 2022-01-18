@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>지뢰 찾기</title>
+</head>
+<style>
+    table { border-collapse: collapse; }
+    td {
+        border: 1px solid #bbb;
+        text-align: center;
+        line-height: 20px;
+        width: 20px;
+        height: 20px;
+        background: #888;
+    }
+    td.opened { background: white; }
+    td.flag { background: red; }
+    td.question { background: orange; }
+</style>
+
+<body>
+<table id="table">
+    <tbody></tbody>
+</table>
+<div id="result"></div>
+
+    <script>
+        const $tbody = document.querySelector('#table tbody');
+        const $result = document.querySelector('#result');
+        const row = 10; //줄
+        const cell = 10; //칸
+        const mine = 10;
+        const CODE = {
+            NORMAL: -1,
+            QUESTION: -2,
+            FLAG: -3,
+            QUESTION_MINE: -4,
+            FLAG_MINE: -5,
+            MINE: -6,
+            OPENED: 0, //0 이상이면 모두 열린 칸
+        }
+
+        let data;
+
+        function plantMine() {
+
+        }
+
+    </script>
+</body>
+
+</html>
