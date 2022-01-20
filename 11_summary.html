@@ -1,0 +1,61 @@
+<h2>단원 마무리</h2>
+
+<p>1. documentFragment</p>
+실무에서는 화면에 태그를 추가할 때 createElement로 만들어서 실제 태그에 바로 추가(append)하는
+방식을 잘 사용하지 않음 (성능 문제)
+그 대신 document.createDocumentFragment 메서드로 메모리 안에서만 존재하는
+documentFragment를 만들고, documentFragment 안에 필요한 태그를 추가(append)한 뒤
+마지막으로 $table에 한 번에 documentFragment를 추가하는 방식을 사용함
+
+documentFragment에 추가하는 것은 성능에 문제가 없지만,
+실제 화면에 보이는 태그에 추가하는 것은 문제가 될 수 있음
+
+
+<p>2. 키보드 이벤트</p>
+대표적인 키보드 에번트: keydown, keyup
+키보드를 누를 때와 눌렀다 뗄 대 각각 호출됨
+어떤 키를 눌렀는지는 event.key 속성에 나옴
+ArrowLeft(왼쪽), ArrowRight(오른쪽), ArrowUp(위쪽), ArrowDown(아래쪽) - 방향 확인 가능
+event.ctrlKey(Ctrl 키), event.altKey(Alt 키), event.shiftKey(Shift 키), event.metaKey(윈도우 키) 속성도
+제공해 다른 키와 동시에 누르는 것도 알아낼 수 있음
+
+<script>
+    window.addEventListener('keydown', (event) => {
+        console.log('keydown', event);
+    });
+
+    window.addEventListener('keyup', (event) => {
+        console.log('keyup', event);
+    });
+
+    window.addEventListener('mousedown', (event) => {
+        console.log('mousedown', event);
+    });
+
+    window.addEventListener('mousemove', (event) => {
+        console.log('mousemove', event);
+    });
+
+    window.addEventListener('mouseup', (event) => {
+        console.log('mouseup', event);
+    });
+
+</script>
+
+키보드나 마우스에서 손을 뗄 때 발생하는 up 이벤트를 기준으로 코드를 작성하는 것이 나음
+(키보드나 마우스 누르고 있으면 down 이벤트가 계속 호출됨)
+
+
+
+<p>3. 마우스 이벤트</p>
+대표적인 마우스 이벤트: mousedown, mouseup, mousemove
+각각 마우스를 클릭할 때와 클릭했다가 뗄 때, 마우스를 이동할 때 호출됨
+마우스의 이벤트 속성에서 x, y 좌표를 얻을 수 있으며 이를 이용해 마우스 위치의 변화를 잡아낼 수 있음
+
+좌표의 종류
+clientX, clientY: 현재 브라우저 페이지 내의 x, y 좌표를 가리킴(픽셀 단위)
+pageX, pageY: 브라우저 내의 x, y좌표를 가리키지만, 스크롤이 있는 경우 스크롤한 픽셀 값까지 포함함
+offsetX, offsetY: 이벤트를 연결한 대상을 기준으로 마우스의 x, y 좌표를 가져옴
+screenX, screenY: 모니터를 기준으로 모니터의 왼족 모서리가 0이 됨
+movementX, movementY: 지난 mousemove 이벤트와 비교해 얼마나 마우스를 움직였는지 표시하므로
+                        mousemove 이벤트인 경우에만 실제 값이 잡힘
