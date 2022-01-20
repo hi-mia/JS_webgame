@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>계산기(Self)</title> <!--Self-Check: 연이어 계산하기-->
+    <style>
+        *{ box-sizing: border-box}
+        #result {width: 180px; height: 50px; margin: 5px; text-align: right}
+        #operator {width: 50px; height: 50px; margin: 5px; text-align: center}
+        button {width: 50px; height: 50px; margin: 5px}
+    </style>
+</head>
+<!-- 계산기 버튼 구현 -->
+<body>
+    <input readonly id="operator">
+    <input readonly type="number" id="result">
+    <div class="row">
+      <button id="num-7">7</button>
+      <button id="num-8">8</button>
+      <button id="num-9">9</button>
+      <button id="plus">+</button>
+    </div>
+    <div class="row">
+      <button id="num-4">4</button>
+      <button id="num-5">5</button>
+      <button id="num-6">6</button>
+      <button id="minus">-</button>
+    </div>
+    <div class="row">
+      <button id="num-1">1</button>
+      <button id="num-2">2</button>
+      <button id="num-3">3</button>
+      <button id="divide">/</button>
+    </div>
+    <div class="row">
+      <button id="clear">C</button>
+      <button id="num-0">0</button>
+      <button id="calculate">=</button>
+      <button id="multiply">x</button>
+    </div>
+    
+    <script>
+       //각 버튼에 이벤트 리스너를 단다 + 고차함수로 중복 제거하기
+        let numOne = '';  //문자열
+        let operator = '';
+        let numTwo = '';  //문자열
+        const $operator = document.querySelector('#operator');
+        const $result = document.querySelector('#result');
+
+       //고차함수를 사용해 0~9부분은 매개변수로 만들고 다른 부분은 함수로 만듦
+        const onClickNumber = (event) => {
+            if (!operator) { // 비어있다
+                numOne += event.target.textContent;
+                $result.value += event.target.textContent;
+                return;
+            }
+
+            //이 아래로는 operator가 존재하는 경우에만 실행됨
+                if (!numTwo) {
+                    $result.value = '';
+                }  
+                numTwo += event.target.textContent;
+                $result.value += event.target.textContent;
+        };
+
+        document.querySelector('#num-0').addEventListener('click', onClickNumber);
+        document.querySelector('#num-1').addEventListener('click', onClickNumber);
+        document.querySelector('#num-2').addEventListener('click', onClickNumber);
+        document.querySelector('#num-3').addEventListener('click', onClickNumber);
+        document.querySelector('#num-4').addEventListener('click', onClickNumber);
+        document.querySelector('#num-5').addEventListener('click', onClickNumber);
+        document.querySelector('#num-6').addEventListener('click', onClickNumber);
+        document.querySelector('#num-7').addEventListener('click', onClickNumber);
+        document.querySelector('#num-8').addEventListener('click', onClickNumber);
+        document.querySelector('#num-9').addEventListener('click', onClickNumber);
+
+        const onClickOperator = (op) => () => {
+            if (numOne) {
+            operator = op;
+            $operator.value = op;
+            } else {
+            alert('숫자를 먼저 입력하세요.');
+            }
+        }
+
+        document.querySelector('#plus').addEventListener('click', onClickOperator('+'));
+        document.querySelector('#minus').addEventListener('click', onClickOperator('-'));
+        document.querySelector('#divide').addEventListener('click', onClickOperator('/'));
+        document.querySelector('#multiply').addEventListener('click', onClickOperator('*'));
+        document.querySelector('#calculate').addEventListener('click', () => {
+            if(numTwo) {
+                switch(operator) {
+                    case '+':
+                        $result.value = parseInt(numOne) + parseInt(numTwo); //문자열 더하기와 숫자 더하기가 다르기 때문
+                        break;
+
+                    case '-':
+                        $result.value = numOne - numTwo; //자동 형변환
+                        break;
+                    
+                    case '*':
+                        $result.value = numOne * numTwo;
+                        break;
+
+                    case '/':
+                        $result.value = numOne / numTwo;
+                        break;
+
+                    default:
+                        break;
+                }
+                    $operator.value = '';
+                    numOne = $result.value;
+                    operator = '';
+                    numTwo = '';
+                } else {
+                    alert('숫자를 먼저 입력하세요.');
+            }
+        });
+        
+        document.querySelector('#clear').addEventListener('click', () => {
+            numOne = '';
+            operator = '';
+            numTwo = '';
+            $operator.value = '';
+            $result.value = '';
+        });
+/*
+연이어 게산하기
+= 버튼을 클릭할 때 계산 결과를 numOne 변수에 저장하고 numTwo 변수를 비워 놓으면 연이어 계산 가능
+
+    1 + 2+ 4 계산
+1) 1 + 2를 계산해 3이 됨 -> 3을 numOne에 저장, numTwo는 비움
+2) 3 + 4를 계산 -> +는 operator, 4는 numTwo에 저장
+3) =를 누르면 3과 4가 더해짐
+
+*/        
+    </script>
+</body>
+
+</html>
