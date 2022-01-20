@@ -41,3 +41,18 @@ contextmenu 이벤트: 기본적으로 브라우저 메뉴를 띄우므로 이�
 setTimeout과 같은 비동기 함수를 사용해 해결 가능
 재귀 함수를 사용할 때는 연산량이 많으면 브라우저가 느려지는 현상이 발생하므로
 연산량을 최소화할 수 있게 코드를 작성
+
+
+<p>&& 연산자</p>
+if문을 줄이기 위해 사용
+앞의 식이 참이면 뒤의 식을 실행하고, 앞의 식이 거짓이면 뒤의 식을 실행하지 않음
+
+<script>
+
+mines.includes(data[rowIndex - 1]?.[cellIndex - 1]) && i++;
+
+if(mines.includes(data[rowIndex - 1]?.[cellIndex - 1])) {
+    i++;
+} //둘 다 같은 식
+
+</script>
