@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>틱택토(Self)</title> <!-- 컴퓨터 차례 구현하기 -->
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid black;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+    <script>
+    //표 직접 그리기
+    const { body } = document; // = (const body = document.body;)
+    const $table = document.createElement('table');
+    const $result = document.createElement('div');//결과창
+    const rows = []; //줄 담당
+    let turn = 'O';
+
+    // [
+    //   [td, td, td],
+    //   [td, td, td],
+    //   [td, td, td],
+    // ]
+
+    //내가 지금 클릭한 칸이 몇 번째 줄, 몇 번째 칸?
+    const checkWinner = (target) => {
+        const rowIndex = target.parentNode.rowIndex;
+        const cellIndex = target.cellIndex;
+        // console.log(target.parentNode.children);
+        // console.log(target.parentNode.children.indexOf(target));
+
+        //세 칸 다 채워졌나?
+        let hasWinner = false;
+        // 가로줄 검사
+        if (
+        rows[rowIndex][0].textContent === turn &&
+        rows[rowIndex][1].textContent === turn &&
+        rows[rowIndex][2].textContent === turn
+        ) {
+        hasWinner = true;
+        }
+        // 세로줄 검사
+        if (
+        rows[0][cellIndex].textContent === turn &&
+        rows[1][cellIndex].textContent === turn &&
+        rows[2][cellIndex].textContent === turn
+        ) {
+        hasWinner = true;
+        }
+        // 대각선 검사
+        if (
+        rows[0][0].textContent === turn &&
+        rows[1][1].textContent === turn &&
+        rows[2][2].textContent === turn
+        ) {
+        hasWinner = true;
+        }
+        if (
+        rows[0][2].textContent === turn &&
+        rows[1][1].textContent === turn &&
+        rows[2][0].textContent === turn
+        ) {
+        hasWinner = true;
+        }
+        return hasWinner;
+    };
+
+    //중복 코드 메소드로(승자 판단, 무승부 판단, 차례 넘김)
+    const checkWinnerAndDraw = (target) => {
+        const hasWinner = checkWinner(target);
+        if (hasWinner) { //승자가 있으면
+            $result.textContent = `${turn}님이 승리!`;
+            $table.removeEventListener('click', callback);
+            return;
+        }
+        //승자가 없으면
+        const draw = rows.flat().every((cell) => cell.textContent); //flat: 배열 차원 1단계 낮춤
+        if (draw) {
+            $result.textContent = `무승부`;
+            return;
+        }
+        turn = turn === 'X' ? 'O' : 'X';
+    };
+
+    //한번 O를 넣은 칸이면 다시 넣지 않도록 점검 코드
+    let clickable = true; //클릭 막기 변수
+    const callback = (event) => {
+        if(!clickable) {
+            return;
+        }
+        if (event.target.textContent !== '') { // 칸이 이미 채워져 있는가?
+        console.log('빈칸이 아닙니다.');
+        return;
+        }
+        // 빈칸이면
+        console.log('빈칸입니다');
+        event.target.textContent = turn;
+        checkWinnerAndDraw(event.target);
+        if(turn === 'X') {
+            const emptyCells = rows.flat().filter((v) => !v.textContent);
+            const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            clickable = false;
+            setTimeout(() => {
+                randomCell.textContent = 'X';
+                checkWinnerAndDraw(randomCell);
+                clickable = true;
+            }, 1000);
+
+        }
+    };
+
+    for (let i = 1; i <= 3; i++) {
+        const $tr = document.createElement('tr');
+        const cells = [];
+        for (let j = 1; j <= 3; j++) {
+            const $td = document.createElement('td');
+            //$td.addEventListener('click', callback); //td 태그를 생성할 때 이벤트 리스너를 바로 붙임
+            cells.push($td); //td 태그를 배열에 추가함
+            $tr.append($td); //동시에 tr 태그 안에 td 태그를 넣음
+        }
+        rows.push(cells);
+        $table.append($tr); //table 태그 안에 tr 태그를 넣음
+    }
+
+    $table.addEventListener('click', callback); //table 태그 하나에만 클릭이벤트 달음
+    body.append($table); //table 태그를 body 태그에 추가
+    body.append($result);
+
+/*
+컴퓨터 차례 구현하기
+callback 함수만 수정하면 됨
+컴퓨터의 차례가 추가됨에 따라 callback 함수에서 승부를 확인하는 코드(checkWinner)를 두 번 사용함
+
+emptyCells 변수에는 비어 있는 칸만 들어 있음
+이때 배열의 filter 메서드를 사용했는데, 
+이 메서드는 요소를 순회하며 인수로 넣은 함수의 반환값이 true가 되는 요소만 걸러냄
+
+승자 판단 / 무승부 판단 / 차례를 넘기는 부분 -> 중복되므로 이 부분을 함수로 따로 뺀다
+
+사용자가 어떤 칸을 클릭하면 컴퓨터가 바로 다음 칸을 선택함(setTimeout으로 적절한 시간 부여)
+이때 컴퓨터가 칸을 선택할 때까지 사용자가 빈칸 클킥 못하도록 막아야 함
+타이머를 사용할 때는 항상 타이머의 콜백 함수가 실행되기 전에 발생할 수 있는 모든 상황 고려해야 함
+*/    
+    </script>
+</body>
+
+</html>
