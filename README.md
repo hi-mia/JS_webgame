@@ -25,7 +25,7 @@
 ![7  틱택토](https://user-images.githubusercontent.com/87554077/150466246-ab0a1ebb-ea5e-40a0-ad4d-47e811464cc1.PNG)
 <br><br>
 ### 8. 텍스트 RPG (클래스 다루기)
-![8  텍스트RPG (1)](https://user-images.githubusercontent.com/87554077/150466267-99cca7c8-83f2-405d-88e8-6aff4f73556f.PNG)
+![8  텍스트RPG (1)](https://user-images.githubusercontent.com/87554077/150466267-99cca7c8-83f2-405d-88e8-6aff4f73556f.PNG)  
 ![8  텍스트RPG (2)](https://user-images.githubusercontent.com/87554077/150466275-1c6b321b-5712-47f9-b2ae-ce75b2bf1d93.PNG)
 <br><br>
 ### 9. 카드 짝 맞추기 (이벤트 루프 이해하기)
